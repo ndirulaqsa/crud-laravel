@@ -21,3 +21,8 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # Mengarahkan semua request internet langsung ke folder public Laravel
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
