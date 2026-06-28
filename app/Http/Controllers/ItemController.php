@@ -124,4 +124,23 @@ class ItemController extends Controller
         $item->update(['status' => 'found']);
         return response()->json($item, 200);
     }
+    public function markAsResolved(string $id)
+{
+    $item = Item::findOrFail($id);
+    $item->update(['status' => 'resolved']);
+
+    // Kirim notifikasi WA ke admin
+    $adminPhone = env('ADMIN_PHONE', '081234567890');
+    $nomorAdmin = preg_replace('/\D/', '', $adminPhone);
+    if (str_starts_with($nomorAdmin, '0')) {
+        $nomorAdmin = '62' . substr($nomorAdmin, 1);
+    }
+    $kode = 'LNF-' . str_pad($item->id, 3, '0', STR_PAD_LEFT);
+    $pesan = urlencode("Halo Admin, laporan *$kode* ({$item->title}) telah ditandai SELESAI oleh pelapor. Silakan verifikasi di app.");
+    
+    // Log URL WA (opsional, untuk debug)
+    \Log::info("WA Admin: https://wa.me/$nomorAdmin?text=$pesan");
+
+    return response()->json($item, 200);
+}
 }
