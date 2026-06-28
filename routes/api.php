@@ -16,6 +16,7 @@ Route::post('/items', [ItemController::class, 'store']);
 Route::put('/items/{id}', [ItemController::class, 'update']);
 Route::delete('/items/{id}', [ItemController::class, 'destroy']);
 Route::put('/items/{id}/found', [ItemController::class, 'markAsFound']);
+Route::put('/items/{id}/resolved', [ItemController::class, 'markAsResolved']);
 
 // === PROTECTED (butuh login) ===
 Route::middleware('auth:sanctum')->group(function () {
