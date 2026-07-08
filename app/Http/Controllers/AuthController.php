@@ -13,13 +13,13 @@ class AuthController extends Controller
     {
         $request->validate([
             'name'     => 'required|string|max:255',
-            'phone'    => 'required|string|unique:users,phone',
+            'username' => 'required|string|unique:users,username',
             'password' => 'required|string|min:6|confirmed',
         ]);
 
         $user = User::create([
             'name'     => $request->name,
-            'phone'    => $request->phone,
+            'username' => $request->username,
             'password' => Hash::make($request->password),
             'role'     => 'user',
         ]);
@@ -35,15 +35,15 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'phone'    => 'required|string',
+            'username' => 'required|string',
             'password' => 'required|string',
         ]);
 
-        $user = User::where('phone', $request->phone)->first();
+        $user = User::where('username', $request->username)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
-                'phone' => ['Nomor WA atau password salah.'],
+                'username' => ['Username atau password salah.'],
             ]);
         }
 
